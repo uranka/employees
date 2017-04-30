@@ -3,7 +3,7 @@ package com.jelena;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-//import murach.business.*;
+import com.jelena.business.*;
 
 //import java.util.LinkedHashMap;
 //import java.util.Map;
@@ -17,8 +17,13 @@ public class EmployeeServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		String name = request.getParameter("username");
-		request.setAttribute("name", name);
+		
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		Employee emp = new Employee(firstName, lastName);	
+		
+		request.setAttribute("employee", emp);
+		
 		RequestDispatcher view = request.getRequestDispatcher("/view.jsp");
 		view.forward(request, response);
 	}
