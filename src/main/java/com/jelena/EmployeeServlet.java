@@ -22,7 +22,8 @@ public class EmployeeServlet extends HttpServlet {
 		String sex = request.getParameter("sex");
 		String[] lang = request.getParameterValues("languages");		
 		List<String> languages = Arrays.asList(lang);
-		Employee emp = new Employee(firstName, lastName, sex, languages);	
+		String degree = request.getParameter("degree");
+		Employee emp = new Employee(firstName, lastName, sex, languages, degree);	
 		
 		request.setAttribute("employee", emp);
 		

@@ -12,5 +12,6 @@ Languages:<br/>
 <c:forEach var="language" items="${employee.languages}">
 	${language}<br/>
 </c:forEach>
+Degree: ${employee.degree}
 </body>
 </html>

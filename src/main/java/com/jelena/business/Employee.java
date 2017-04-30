@@ -9,6 +9,7 @@ public class Employee {
 	private String lastName;
 	private String sex;
 	List<String> languages; 
+	private String degree;
 	
 	public Employee() {
 		firstName = "";
@@ -23,11 +24,12 @@ public class Employee {
 		this.sex = sex;
 	}
 	
-	public Employee(String firstName, String lastName, String sex, List<String> languages) {
+	public Employee(String firstName, String lastName, String sex, List<String> languages, String degree) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.sex = sex;
 		this.languages = languages;
+		this.degree = degree;
 	}
 	
 	public String getFirstName() {
@@ -61,6 +63,14 @@ public class Employee {
 	public void setLanguages(List<String> languages) {
 		this.languages = languages;
 	}	
+	
+	public String getDegree() {
+		return degree;
+	}
+	
+	public void setDegree(String degree) {
+		this.degree = degree;
+	}		
 }	
 	
 	
