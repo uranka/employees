@@ -4,10 +4,9 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import com.jelena.business.*;
-
-//import java.util.LinkedHashMap;
-//import java.util.Map;
-
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 //http://localhost:8080/employees/employee
 // Na ovaj servlet se POST metodom dolazi preko forme klikom na submit dugme submit
@@ -20,7 +19,10 @@ public class EmployeeServlet extends HttpServlet {
 		
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
-		Employee emp = new Employee(firstName, lastName);	
+		String sex = request.getParameter("sex");
+		String[] lang = request.getParameterValues("languages");		
+		List<String> languages = Arrays.asList(lang);
+		Employee emp = new Employee(firstName, lastName, sex, languages);	
 		
 		request.setAttribute("employee", emp);
 		
