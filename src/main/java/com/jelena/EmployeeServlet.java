@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.jelena.data.*;
+import com.jelena.data.jdbc.*;
 
 //http://localhost:8080/employees/employee
 // Na ovaj servlet se POST metodom dolazi preko forme klikom na submit dugme submit
@@ -45,6 +46,9 @@ public class EmployeeServlet extends HttpServlet {
 		}		
 		System.out.println("-------------------------------------------");
 		request.setAttribute("listEmployees", listEmployees);
+		
+		// test baze
+		PreparedStatementTest.insertTwoEmployeesTest();
 		
 		RequestDispatcher view = request.getRequestDispatcher("/view.jsp");
 		view.forward(request, response);
