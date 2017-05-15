@@ -7,6 +7,7 @@ import com.jelena.business.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.servlet.annotation.*;
 
 import com.jelena.data.*;
 import com.jelena.data.jdbc.*;
@@ -14,6 +15,7 @@ import com.jelena.data.jdbc.*;
 //http://localhost:8080/employees/employee
 // Na ovaj servlet se POST metodom dolazi preko forme klikom na submit dugme submit
 
+@MultipartConfig(maxFileSize = 16177215) // upload file's size up to 16MB
 public class EmployeeServlet extends HttpServlet {	
 	private InMemoryService inMemoryService = new InMemoryService(); 
 	private JdbcEmployeeRepository jdbcEmployeeRepository = new JdbcEmployeeRepository();
@@ -30,13 +32,30 @@ public class EmployeeServlet extends HttpServlet {
 		List<String> languages = Arrays.asList(lang);
 		String degree = request.getParameter("degree");
 		
+		// GETTING PHOTO
+       // InputStream fileContent = null; // input stream of the upload file
+         
+        // obtains the upload file part in this multipart request
+        Part filePart = request.getPart("photo");
+        if (filePart != null) {
+            // prints out some information for debugging
+            System.out.println(filePart.getName());
+            System.out.println(filePart.getSize());
+            System.out.println(filePart.getContentType());
+             
+            // obtains input stream of the upload file
+            //fileContent = filePart.getInputStream();
+        }		
+		
+		// snimanje u bazu bazom preko jdbcEmployeeRepository
+		
 		// dodaj i id koji ne dolazi preko requsta nego o njemu vodi racuna klasa InMemoryService 
 		// servlet ce preko klase InMemoryService da pravi id i da snima u mapu u memoriji (kasnije u bazu)		
 		Employee emp = new Employee(firstName, lastName, sex, languages, degree);			
 		Employee empSavedToMap = inMemoryService.save(emp); // ovo vraca objekat klase employee sa podesenim id
 		
 		// insert employee from form into database		
-		jdbcEmployeeRepository.insertEmployee(empSavedToMap); // ovaj employee je prilikom snimanja u mapu dobio id
+		jdbcEmployeeRepository.insertEmployee(empSavedToMap, filePart); // ovaj employee je prilikom snimanja u mapu dobio id
 				
 		// za prikaz mu ne treba id pa mogu i emp da saljem
 		request.setAttribute("employee", emp);
