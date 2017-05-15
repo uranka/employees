@@ -34,16 +34,10 @@ public class EmployeeServlet extends HttpServlet {
 		// servlet ce preko klase InMemoryService da pravi id i da snima u mapu u memoriji (kasnije u bazu)		
 		Employee emp = new Employee(firstName, lastName, sex, languages, degree);			
 		Employee empSavedToMap = inMemoryService.save(emp); // ovo vraca objekat klase employee sa podesenim id
-		// snimi ga i u bazu
-		// insert ako ga je novi (nema jos dodoljen id), a update ako ga ima (ima dodeljen id)		
-		// napravi klasu JdbcEmployeeRepository koja radi save objekta Employee u bazu
-		// ali i findOne prema id-u, findAll,..
-		// https://gitlab.levi9.com/d.gajic/code9/tree/master/tutorial/workshop3/lab11-end/src/main/java/rs/code9/taster/repository
-		// pravim samo insert, ko god da je dosao sa forme taj je za insert
 		
+		// insert employee from form into database		
 		jdbcEmployeeRepository.insertEmployee(empSavedToMap); // ovaj employee je prilikom snimanja u mapu dobio id
-		// ovo zasad snima samo zaposlenog ali ne i jezike koje on govori u tabelu employees_languages!!!!!!!!!!
-		
+				
 		// za prikaz mu ne treba id pa mogu i emp da saljem
 		request.setAttribute("employee", emp);
 		
@@ -56,9 +50,7 @@ public class EmployeeServlet extends HttpServlet {
 		}		
 		System.out.println("-------------------------------------------");
 		request.setAttribute("listEmployees", listEmployees);
-		
-		// test baze
-		// PreparedStatementTest.insertTwoEmployeesTest();
+	
 		
 		RequestDispatcher view = request.getRequestDispatcher("/view.jsp");
 		view.forward(request, response);
