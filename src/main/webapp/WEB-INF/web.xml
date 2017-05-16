@@ -11,8 +11,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<servlet-class>com.jelena.EmployeeServlet</servlet-class>
 </servlet>
 <servlet-mapping>
-	<servlet-name> EmployeeServlet </servlet-name>
+	<servlet-name>EmployeeServlet</servlet-name>
 	<url-pattern>/employee</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>ShowEmployeeServlet</servlet-name>
+	<servlet-class>com.jelena.ShowEmployeeServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>ShowEmployeeServlet</servlet-name>
+	<url-pattern>/showemployee</url-pattern>
 </servlet-mapping>
 
 

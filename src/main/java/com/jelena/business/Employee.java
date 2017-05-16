@@ -22,11 +22,20 @@ public class Employee {
 		id = null;		
 	}
 	
-	public Employee(String firstName, String lastName, String sex) {
+	public Employee(String firstName, String lastName, String sex, String degree) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.sex = sex;
+		this.degree = degree;
 		id = null;
+	}
+	
+	public Employee(Long id, String firstName, String lastName, String sex, String degree) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.sex = sex;
+		this.degree = degree;
+		this.id = id;
 	}
 	
 	public Employee(String firstName, String lastName, String sex, List<String> languages, String degree) {

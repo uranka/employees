@@ -132,4 +132,51 @@ public class JdbcEmployeeRepository {
 	}		
 /**************************************************************************************************************/		
 	
+	public Employee findEmployee(int employeeId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;		
+		Employee emp = null;					
+			try {		
+				conn = JDBCUtil.getConnection();			
+				pstmt = getSelectEmployeeSQL(conn);								
+				pstmt.setLong(1, employeeId);
+				ResultSet rs = pstmt.executeQuery();
+				// upakuj rs u objekat Employee
+				// Moves the cursor to the first row in this ResultSet object
+				// true if the cursor is on a valid row; false if there are no rows in the result set					
+				if (rs.first()) {
+					int id = rs.getInt("employee_id");
+					String firstName = rs.getString("first_name");
+					String lastName = rs.getString("last_name");					
+					String sex = rs.getString("sex");
+					String degree = rs.getString("degree");
+					emp = new Employee(Long.valueOf(id), firstName,lastName, sex, degree);
+					
+					//kontrola
+					System.out.print("Employee ID: " + id);
+					System.out.print(", First Name: " + firstName);
+					System.out.println(", Last Name: " + lastName);
+					System.out.println("Employee selected successfully.");					
+				}								
+				JDBCUtil.commit(conn);				
+				//return emp;
+			}
+			catch (SQLException e) {
+				System.out.println(e.getMessage());	
+				JDBCUtil.rollback(conn);	
+			}
+			finally {		
+				JDBCUtil.closeStatement(pstmt);
+				JDBCUtil.closeConnection(conn);
+			}
+			return emp;			
+	}
+	
+	public PreparedStatement getSelectEmployeeSQL(Connection conn) throws SQLException {
+		String SQL = "SELECT employee_id, first_name, last_name, sex, degree " +
+					"FROM employees " +
+					"WHERE employee_id = ?";					
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		return pstmt;		
+	}
 }
