@@ -15,6 +15,11 @@
 		Last Name: ${employee.lastName}<br/>
 		Sex: ${employee.sex}<br/>
 		Degree: ${employee.degree}<br/>	
+		Picture from folder images (not from the database)<img src="images/e2.jpg" alt="esign" /><br/>
+		<img src="http://localhost:8080/employees/photo?id=${employee.id}" />
+		<img src="${pageContext.request.contextPath}/?id=${employee.id}" />
+		<!-- neke promenljive stavi ovde umesto localhost employees
+		pageContext i ta cudesa-->
 	</c:otherwise>
 </c:choose>
 </body>

@@ -9,6 +9,8 @@ import java.sql.Types;
 import javax.servlet.http.*;
 import java.io.*;
 
+import java.sql.Blob;
+
 import com.jelena.business.*;
 
 
@@ -179,4 +181,41 @@ public class JdbcEmployeeRepository {
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 		return pstmt;		
 	}
+	
+	
+	public Blob findEmployeePhoto(int employeeId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;		
+		Blob photo = null;					
+		try {		
+			conn = JDBCUtil.getConnection();			
+			pstmt = getSelectEmployeePhotoSQL(conn);								
+			pstmt.setLong(1, employeeId);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.first()) {
+				photo = rs.getBlob("picture");					
+				System.out.println("Employee's photo selected successfully.");
+			}
+			JDBCUtil.commit(conn);
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());	
+			JDBCUtil.rollback(conn);	
+		}
+		finally {		
+			JDBCUtil.closeStatement(pstmt);
+			JDBCUtil.closeConnection(conn);
+		}
+		return photo;
+	}
+			
+	
+	
+	public PreparedStatement getSelectEmployeePhotoSQL(Connection conn) throws SQLException {
+		String SQL = "SELECT picture " +
+					"FROM employees " +
+					"WHERE employee_id = ?";					
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		return pstmt;		
+	}	
 }
