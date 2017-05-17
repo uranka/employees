@@ -13,22 +13,11 @@ import java.sql.Blob;
 
 import com.jelena.business.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class JdbcEmployeeRepository {
-/*	
-	public Employee save(final Employee employee) {
-		if (employee.getId() != null) {
-			// update
-			System.out.println("Employee update");
-		}
-		else{
-			// insert
-			
-			System.out.println("Employee insert");			
-		}
-	}
-*/
-
 	
 	public void insertEmployee(Employee employee, Part filePart) throws IOException{		
 			
@@ -152,7 +141,10 @@ public class JdbcEmployeeRepository {
 					String lastName = rs.getString("last_name");					
 					String sex = rs.getString("sex");
 					String degree = rs.getString("degree");
-					emp = new Employee(Long.valueOf(id), firstName,lastName, sex, degree);
+					/***********************/
+					List<String> languages = findEmployeeLanguages(employeeId);					
+					/***********************/
+					emp = new Employee(Long.valueOf(id), firstName,lastName, sex, languages, degree);
 					
 					//kontrola
 					System.out.print("Employee ID: " + id);
@@ -207,8 +199,7 @@ public class JdbcEmployeeRepository {
 			JDBCUtil.closeConnection(conn);
 		}
 		return photo;
-	}
-			
+	}			
 	
 	
 	public PreparedStatement getSelectEmployeePhotoSQL(Connection conn) throws SQLException {
@@ -217,5 +208,45 @@ public class JdbcEmployeeRepository {
 					"WHERE employee_id = ?";					
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 		return pstmt;		
-	}	
+	}
+	
+/***************************************************************************************************/
+	public PreparedStatement getSelectEmployeeLanguagesSQL(Connection conn) throws SQLException {
+		String SQL = "SELECT l.name " +
+					"FROM employees e JOIN employees_languages el " +
+					"USING(employee_id) " +
+					"JOIN languages l " +
+					"USING(language_id) " +
+					"WHERE e.employee_id = ?";
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		return pstmt;
+	}
+	
+	public List<String> findEmployeeLanguages(int employeeId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;		
+		List<String> empLanguages = new ArrayList<String>();					
+		try {		
+			conn = JDBCUtil.getConnection();			
+			pstmt = getSelectEmployeeLanguagesSQL(conn);								
+			pstmt.setLong(1, employeeId);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				String language = rs.getString(1);
+				empLanguages.add(language);
+			}
+			JDBCUtil.commit(conn);
+			System.out.println("Employee's languages selected successfully.");
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());	
+			JDBCUtil.rollback(conn);	
+		}
+		finally {		
+			JDBCUtil.closeStatement(pstmt);
+			JDBCUtil.closeConnection(conn);
+		}
+		return empLanguages;			
+	}
+	
 }

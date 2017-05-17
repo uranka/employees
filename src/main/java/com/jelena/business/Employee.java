@@ -47,6 +47,15 @@ public class Employee {
 		id = null;
 	}
 	
+	public Employee(Long id, String firstName, String lastName, String sex, List<String> languages, String degree) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.sex = sex;
+		this.languages = languages;
+		this.degree = degree;
+		this.id = id;
+	}	
+	
 	public Long getId() {
 		return id;
 	}
