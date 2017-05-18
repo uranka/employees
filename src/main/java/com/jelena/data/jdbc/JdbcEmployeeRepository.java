@@ -15,9 +15,17 @@ import com.jelena.business.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+
+import javax.validation.*;
 
 
 public class JdbcEmployeeRepository {
+	
+	private ValidatorFactory vf = Validation.buildDefaultValidatorFactory();	
+	private Validator validator = vf.getValidator();
+	private Set<ConstraintViolation<Employee>> violations;
+	
 	
 	public void insertEmployee(Employee employee, Part filePart) throws IOException{		
 			
@@ -25,6 +33,20 @@ public class JdbcEmployeeRepository {
 			PreparedStatement pstmt = null;
 			InputStream fileContent = null; // input stream of the upload file
 			
+			// trigger validation
+			violations = validator.validate(employee);
+			if (violations.size() > 0) {
+				for (ConstraintViolation<Employee> violation : violations){
+					System.out.println(
+							violation.getRootBeanClass().getSimpleName() +
+						"." + violation.getPropertyPath() +
+						"-" + violation.getInvalidValue() + 
+						"-" + violation.getMessage()						
+							);
+				}
+			}
+			else {
+				
 			try {
 				conn = JDBCUtil.getConnection();
 				
@@ -81,7 +103,8 @@ public class JdbcEmployeeRepository {
 			}
 			finally {				
 				JDBCUtil.closeConnection(conn);
-			}		
+			}
+			}	
 	}	
 	
 	public PreparedStatement getInsertEmployeeSQL(Connection conn) throws SQLException {

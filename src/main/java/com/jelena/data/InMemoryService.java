@@ -13,7 +13,7 @@ public class InMemoryService {
 	// Map for in-memory storage
 	private final Map<Long, Employee> map = new LinkedHashMap<Long, Employee>();
 	// ID generation sequence
-	private final AtomicLong sequence = new AtomicLong(650);
+	private final AtomicLong sequence = new AtomicLong(700);
 	
 	
 	public Employee findOne(Long id) {

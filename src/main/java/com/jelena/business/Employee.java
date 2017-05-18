@@ -2,14 +2,23 @@ package com.jelena.business;
 
 import java.util.List;
 import java.util.ArrayList;
+import javax.validation.constraints.*;
 
 public class Employee {
 	
 	private Long id;
 
+	@NotNull	
+	@Size (min = 2, max = 30)
 	private String firstName;
+	
+	@NotNull
+	@Size (min = 2, max = 30)
 	private String lastName;
+	
+	@NotNull
 	private String sex;
+	
 	List<String> languages; 
 	private String degree;
 	
