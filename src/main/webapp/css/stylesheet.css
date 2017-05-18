@@ -1,0 +1,85 @@
+*:focus {outline: none;}
+form {
+	margin:10px auto;
+    max-width: 400px;
+    /*padding: 20px 12px 10px 20px;*/
+	padding: 20px;
+    font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	border: 1px solid black;
+}
+
+li {
+	/*padding: 0;*/
+	padding: 5px;
+    display: block;
+    list-style: none;
+    margin: 10px 0 0 0;
+}
+
+label {
+	margin:0 0 3px 0;
+    padding:0px;
+    display:block;
+    font-weight: bold;
+}
+
+.kratko-polje{
+	width: 47%;
+	height: 2em;
+}
+/*
+.dugo-polje{
+	width: 98%;
+	height: 2em;
+}
+*/
+
+select {
+	width: 98%;
+	height: 2em;
+	font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;	
+}
+/*
+textarea {
+	width: 98%;
+	font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+*/
+
+ul {
+	list-style-type: none;
+}
+
+span.required {
+	color:red;
+}
+
+input[type="submit"]  {
+	background-color: #4B99AD;
+	color:white;
+	padding: 8px 15px 8px 15px;
+	border: none;
+}
+
+input[type=submit]:hover {
+	background-color: #4691A4;
+}
+
+	
+input[type=text]:focus {
+	box-shadow: 0 0 8px #88D5E9;
+	border: 1px solid #88D5E9;	
+}
+
+select:focus {
+	box-shadow: 0 0 8px #88D5E9;
+	border: 1px solid #88D5E9;
+}
+/*mora spojeno odmah posle: da ide focus, ne textarea: focus*/
+/*
+textarea:focus {
+	box-shadow: 0 0 8px #88D5E9;
+	border: 1px solid #88D5E9;
+}
+*/
+	

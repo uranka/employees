@@ -1,0 +1,19 @@
+body {  
+  font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  margin: 0;
+  background-color:white;
+ }
+
+table {
+    border-collapse: collapse;
+}
+
+table, td {
+   /* border: 1px solid black;*/
+   font-size: 13px; /* nece da primeni ono iz body, koristi default browser setting za table*/
+   padding: 10px 2px; /*top/bottom, left/right*/
+}
+
+.what {
+	text-align: right;
+}
