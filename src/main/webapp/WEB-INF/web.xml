@@ -24,6 +24,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<url-pattern>/showemployee</url-pattern>
 </servlet-mapping>
 
+<servlet>
+	<servlet-name>ShowEmployeesServlet</servlet-name>
+	<servlet-class>com.jelena.ShowEmployeesServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>ShowEmployeesServlet</servlet-name>
+	<url-pattern>/showemployees</url-pattern>
+</servlet-mapping>
+
 
 <servlet>
 	<servlet-name>PhotoServlet</servlet-name>

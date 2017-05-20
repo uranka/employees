@@ -112,7 +112,13 @@ public class Employee {
 	
 	public void setDegree(String degree) {
 		this.degree = degree;
-	}		
+	}	
+	
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", sex=" + sex
+				+ ", languages=" + languages + ", degree=" + degree + "]";
+	}	
 }	
 	
 	

@@ -104,20 +104,7 @@ public class JdbcEmployeeRepository {
 						}
 						else {
 							pstmt.setNull(6, Types.BLOB);
-						}
-							
-						/*
-						if (ImageIO.read(fileContent) == null) {
-							// not an image
-							System.out.println("not an image");// kad nema slike ovo javi i kada nije slika, kada je npr txt
-							pstmt.setNull(6, Types.BLOB);						
-						}
-						else {
-							System.out.println("is image");
-							// proveriti i da li je bas jpg, a ako dopustim bilo koji tip slike onda mi treba  
-							// VARCHAR kolona u bazi koja pamti tip slike						
-							pstmt.setBlob(6, fileContent);						
-						}*/
+						}							
 							
 						// Execute the statement
 						pstmt.executeUpdate();	
@@ -338,6 +325,52 @@ public class JdbcEmployeeRepository {
 		String format = reader.getFormatName();		
 		//iis.close();	
 		return format.equalsIgnoreCase("JPEG")? true : false;		
-	}		
+	}
+
+/**************************** PAGINATION *********************************************/	
+	// Vraca listu zaposlenih za stranicu ciji je redni broj pageNumber, 
+	// a velicine pageSize. Velicina se izrazava u broju zaposlenih.
+	public List<Employee> retrievePageSizeEmployees(int pageNumber, int pageSize) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;		
+		Employee emp = null;
+		List<Employee> empList = new ArrayList<Employee>();
+		try {		
+			conn = JDBCUtil.getConnection();			
+			pstmt = getSelectPageSizeEmployeesSQL(conn);								
+			pstmt.setInt(1, (pageNumber - 1) * pageSize);
+			pstmt.setInt(2, pageSize);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int employeeId = rs.getInt("employee_id");
+				String firstName = rs.getString("first_name");
+				String lastName = rs.getString("last_name");					
+				String sex = rs.getString("sex");
+				String degree = rs.getString("degree");
+					
+				List<String> languages = findEmployeeLanguages(employeeId);				
+				emp = new Employee(Long.valueOf(employeeId), firstName,lastName, sex, languages, degree);
+				empList.add(emp);
+			}				
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());	
+			JDBCUtil.rollback(conn);	
+		}
+		finally {		
+			JDBCUtil.closeStatement(pstmt);
+			JDBCUtil.closeConnection(conn);
+		}			
+		return empList;
+	}
 	
+	
+	public PreparedStatement getSelectPageSizeEmployeesSQL(Connection conn) throws SQLException {
+		String SQL = "SELECT employee_id, first_name, last_name, sex, degree " +
+					"FROM employees " +
+					"ORDER BY employee_id " +
+					"LIMIT ?, ? ";
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		return pstmt;		
+	}
 }
