@@ -29,7 +29,7 @@ public class PhotoServlet extends HttpServlet {
 				int position = 1;			
 				byte[] photoBytes = photo.getBytes(position, length);
 				photo.free();
-				response.setContentType("image/jpg");
+				response.setContentType("image/jpg"); // ne mogu prikazati nijedan drugi tip slike ovako
 				response.setContentLength(length);
 				response.getOutputStream().write(photoBytes);
 			}

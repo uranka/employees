@@ -15,7 +15,7 @@ import com.jelena.data.jdbc.*;
 //http://localhost:8080/employees/employee
 // Na ovaj servlet se POST metodom dolazi preko forme klikom na submit dugme submit
 
-@MultipartConfig(maxFileSize = 16177215) // upload file's size up to 16MB
+@MultipartConfig(maxFileSize = 20480) // upload file's size up to 20KB
 public class EmployeeServlet extends HttpServlet {	
 	private InMemoryService inMemoryService = new InMemoryService(); 
 	private JdbcEmployeeRepository jdbcEmployeeRepository = new JdbcEmployeeRepository();
@@ -26,8 +26,7 @@ public class EmployeeServlet extends HttpServlet {
 		
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
-		String sex = request.getParameter("sex");
-		System.out.println("kontrola parametra sex koji dolazi sa forme, sex = " + sex);
+		String sex = request.getParameter("sex");		
 		String[] lang = request.getParameterValues("languages");		
 		List<String> languages = Arrays.asList(lang);
 		String degree = request.getParameter("degree");
@@ -37,6 +36,13 @@ public class EmployeeServlet extends HttpServlet {
          
         // obtains the upload file part in this multipart request
         Part filePart = request.getPart("photo");
+		// izgleda da filePart nije null i kada nema slike
+		// kada nema slike ispisuje:
+		// photo
+		// 0
+		// application/octet-stream
+		// kako proveriti da nije slika poslata sa formom?
+		// kako da proverim da je odabrani fajl bas slika, tipa .jpg? da li moram imati jpg ili mogu jos neke tipove slika da primam?
         if (filePart != null) {
             // prints out some information for debugging
             System.out.println(filePart.getName());

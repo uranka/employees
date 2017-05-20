@@ -8,16 +8,28 @@ import java.sql.ResultSet;
 import java.sql.Types;
 import javax.servlet.http.*;
 import java.io.*;
+import javax.imageio.ImageIO;
 
 import java.sql.Blob;
 
 import com.jelena.business.*;
+import com.jelena.exceptions.*;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 
 import javax.validation.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 
 public class JdbcEmployeeRepository {
@@ -47,63 +59,103 @@ public class JdbcEmployeeRepository {
 			}
 			else {
 				
-			try {
-				conn = JDBCUtil.getConnection();
-				
 				try {
-					// INSERT EMPLOYEE
-					pstmt = getInsertEmployeeSQL(conn);
+					conn = JDBCUtil.getConnection();
 					
-					// Set all the input parameters
-					pstmt.setLong(1, employee.getId());// u bazi mi int a u java objektu long
-					pstmt.setString(2, employee.getFirstName());
-					pstmt.setString(3, employee.getLastName());
-					pstmt.setString(4, employee.getSex());
-					// degree can be null
-					if (employee.getDegree() == null) {
-						pstmt.setNull(5, Types.VARCHAR);
-					}
-					else {
-						pstmt.setString(5, employee.getDegree());
-					}	
-					fileContent = filePart.getInputStream();
-					if (fileContent != null) {
-						pstmt.setBlob(6, fileContent);
-					}
-					// Execute the statement
-					pstmt.executeUpdate();	
-					
-/************************** INSERT EMPLOYEE'S LANGUAGES********************************************/											
-					
-					pstmt = getInsertEmployeeLanguagesSQL(conn);					
-			
-					for (String language : employee.getLanguages()) {
-					
-						pstmt.setLong(1, employee.getId());
-						// prvo proveri da nije convert vratio 0
-						pstmt.setInt(2, convertLanguageNameToId(conn, language)); 
-						pstmt.executeUpdate();
-					}
-					
-					JDBCUtil.commit(conn);
-					System.out.println("Employee and employee's languages inserted successfully.");
-				}
-/*****************************************************************************************************/					
-				catch (SQLException e) {
-					System.out.println(e.getMessage());
-					JDBCUtil.rollback(conn);
-				}
-				finally {					
-					JDBCUtil.closeStatement(pstmt);				
-				}	
+					try {
+						// INSERT EMPLOYEE
+						pstmt = getInsertEmployeeSQL(conn);
+						
+						// Set all the input parameters
+						pstmt.setLong(1, employee.getId());// u bazi mi int a u java objektu long
+						pstmt.setString(2, employee.getFirstName());
+						pstmt.setString(3, employee.getLastName());
+						pstmt.setString(4, employee.getSex());
+						
+						// degree can be null
+						if (employee.getDegree() == null) {
+							pstmt.setNull(5, Types.VARCHAR);
+						}
+						else {
+							pstmt.setString(5, employee.getDegree());
+						}
+						
+						// picture
+						// if picture is not jpeg format everything else about employee will be inserted
+						// into the database and picture will be set to NULL
+						fileContent = filePart.getInputStream();	
+							
+						boolean isJpeg = false;									
+						try {
+							isJpeg = isImageFormatJpeg(fileContent); // isImageFormatJpeg pokvari input stream 								
+							fileContent = filePart.getInputStream();// uzmi ponovo input stream 
+							System.out.println("ending try jpeg");
+						}
+						catch(NoImageReaderException e) {
+							System.out.println(e.getMessage());	
+							System.out.println("ending no image reader catch jpeg");						
+						}
+						
+						System.out.println("continue..");
+						System.out.println("isJpeg: " + isJpeg);
+											
+						if (isJpeg) {
+							pstmt.setBlob(6, fileContent);
+						}
+						else {
+							pstmt.setNull(6, Types.BLOB);
+						}
+							
+						/*
+						if (ImageIO.read(fileContent) == null) {
+							// not an image
+							System.out.println("not an image");// kad nema slike ovo javi i kada nije slika, kada je npr txt
+							pstmt.setNull(6, Types.BLOB);						
+						}
+						else {
+							System.out.println("is image");
+							// proveriti i da li je bas jpg, a ako dopustim bilo koji tip slike onda mi treba  
+							// VARCHAR kolona u bazi koja pamti tip slike						
+							pstmt.setBlob(6, fileContent);						
+						}*/
+							
+						// Execute the statement
+						pstmt.executeUpdate();	
+						// close mora posle executeUpdate, ne moze pre
+						fileContent.close();
+						 
+						
+	/************************** INSERT EMPLOYEE'S LANGUAGES********************************************/											
+						
+						pstmt = getInsertEmployeeLanguagesSQL(conn);					
 				
-			}
-			catch (SQLException e) {
-				System.out.println(e.getMessage());				
-			}
-			finally {				
-				JDBCUtil.closeConnection(conn);
-			}
+						for (String language : employee.getLanguages()) {
+						
+							pstmt.setLong(1, employee.getId());
+							// prvo proveri da nije convert vratio 0
+							pstmt.setInt(2, convertLanguageNameToId(conn, language)); 
+							pstmt.executeUpdate();
+						}
+						
+						JDBCUtil.commit(conn);
+						System.out.println("Employee and employee's languages inserted successfully.");
+					}
+	/*****************************************************************************************************/					
+					catch (SQLException e) {
+						System.out.println(e.getMessage());
+						JDBCUtil.rollback(conn);
+					}
+					finally {					
+						JDBCUtil.closeStatement(pstmt);				
+					}	
+					
+				}
+				catch (SQLException e) {
+					System.out.println(e.getMessage());				
+				}
+				finally {				
+					JDBCUtil.closeConnection(conn);
+				}
 			}	
 	}	
 	
@@ -271,5 +323,21 @@ public class JdbcEmployeeRepository {
 		}
 		return empLanguages;			
 	}
+	
+	public boolean isImageFormatJpeg(InputStream is) throws IOException, NoImageReaderException  {
+		ImageInputStream iis = ImageIO.createImageInputStream(is);
+		// get all currently registered readers that recognize the image format		
+		Iterator<ImageReader> iter = ImageIO.getImageReaders(iis);
+		if (!iter.hasNext()) {
+			throw new NoImageReaderException ("No readers found says isImageFormatJpeg function!");			
+		}
+		
+		System.out.println("Readers found");
+		// get the first reader
+		ImageReader reader = iter.next();
+		String format = reader.getFormatName();		
+		//iis.close();	
+		return format.equalsIgnoreCase("JPEG")? true : false;		
+	}		
 	
 }
