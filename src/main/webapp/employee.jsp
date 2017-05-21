@@ -15,33 +15,33 @@
 		<table>
 			<tr>
 				<td class="what">First Name:</td>
-				<td>${employee.firstName}</td>
+				<td><c:out value="${employee.firstName}"/></td>				
 				<td rowspan="3">
 					<img src="http://localhost:8080/employees/photo?id=${employee.id}" height="100" />
 				</td>
 			</tr>
 			<tr>
 				<td class="what">Last Name:</td>
-				<td>${employee.lastName}</td>		
+				<td><c:out value="${employee.lastName}"/></td>							
 			</tr>
 			<tr>
 				<td class="what">Sex:</td>
-				<td>${employee.sex}</td>
+				<td><c:out value="${employee.sex}"/></td>					
 			</tr>
 			<tr>
 				<td class="what"> Languages:</td>
-				<td>${employee.languages[0]}</td>
+				<td><c:out value="${employee.languages[0]}"/></td>					
 			</tr>
 			
 			<c:forEach var="language" items="${employee.languages}" begin="1">
 				<tr>
 					<td></td>
-					<td>${language}</td>
+					<td><c:out value="${language}"/></td>					
 				</tr>
 			</c:forEach>
 			<tr>
 				<td class="what">Degree:</td>
-				<td>${employee.degree}</td>		
+				<td><c:out value="${employee.degree}"/></td>				
 			</tr>			
 		</table>		
 	</c:otherwise>

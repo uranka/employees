@@ -5,23 +5,25 @@
 	<title>Employee Data</title>
 </head>
 <body>
-First Name: ${employee.firstName}<br/>
-Last Name: ${employee.lastName}<br/>
-Sex: ${employee.sex}<br/>
+First Name: <c:out value="${employee.firstName}"/><br/>
+Last Name: <c:out value="${employee.lastName}"/><br/>
+Sex: <c:out value="${employee.sex}"/><br/>
 Languages:<br/>
 <c:forEach var="language" items="${employee.languages}">
-	${language}<br/>
+	<c:out value="${language}"/><br/>
 </c:forEach>
-Degree: ${employee.degree}
+Degree: <c:out value="${employee.degree}"/>
 
-<p>List of all employees:</p>
+<p>List of all employees in the map:</p>
 <c:forEach var="employee" items="${listEmployees}">
-	${employee.id}. - ${employee.firstName} ${employee.lastName}, ${employee.sex}<br/>	 
+	<c:out value="${employee.id}"/>. - 
+	<c:out value="${employee.firstName}"/> <c:out value="${employee.lastName}"/>,
+	<c:out value="${employee.sex}"/><br/>	 
 	Languages:<br/>
 	<c:forEach var="language" items="${employee.languages}">
-		${language}<br/>
+		<c:out value="${language}"/><br/>
 	</c:forEach>
-	${employee.degree}<br/>
+	<c:out value="${employee.degree}"/><br/>
 </c:forEach>
 </body>
 </html>
