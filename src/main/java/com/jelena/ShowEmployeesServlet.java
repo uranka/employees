@@ -29,26 +29,15 @@ public class ShowEmployeesServlet extends HttpServlet {
 		
 		request.setAttribute("employees", empList);		
 		
-		int total = 42;
+		// total number of employees in the employees table
+		int total = jdbcEmployeeRepository.getEmployeeCount();
+		System.out.println("tatal = " + total);
+		
 		int numberOfPages = (int)Math.ceil((double)total/pageSize);
 		request.setAttribute("numberOfPages", numberOfPages);
 		
 		RequestDispatcher view = request.getRequestDispatcher("/employees.jsp");
-		view.forward(request, response);
-		
-		/*
-		int total = 42;
-		int pageSize = 10;		
-		int numberOfPages = (int)Math.ceil((double)total/pageSize);
-		System.out.println("numberOfPages = " + numberOfPages);
-		for (int i = 1; i <= numberOfPages; i++) {
-			System.out.println("Page #" + i);
-			List<Employee> empList = jdbcEmployeeRepository.retrievePageSizeEmployees(i, pageSize); 
-			for (Employee employee : empList) {
-				System.out.println(employee);
-			}
-		}
-		*/		
+		view.forward(request, response);	
 	}
 }
 		

@@ -22,7 +22,7 @@ Number of pages: ${numberOfPages}<br/>
 	<br/><br/>	
 </c:forEach>
 
-<c:forEach var = "i" begin = "1" end = "5">
+<c:forEach var = "i" begin = "1" end = "${numberOfPages}">
 	<a href="showemployees?page=${i}">Show ${i}. page</a>         
 </c:forEach>
 

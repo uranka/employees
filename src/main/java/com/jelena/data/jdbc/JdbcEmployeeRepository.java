@@ -373,4 +373,38 @@ public class JdbcEmployeeRepository {
 		PreparedStatement pstmt = conn.prepareStatement(SQL);
 		return pstmt;		
 	}
+	
+	
+	public PreparedStatement getEmployeeCountSQL(Connection conn) throws SQLException {
+		String SQL = "SELECT COUNT(*) " +
+					"FROM employees ";					
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		return pstmt;		
+	}	
+	
+	public int getEmployeeCount() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;		
+		int count = 0;				
+		try {		
+			conn = JDBCUtil.getConnection();			
+			pstmt = getEmployeeCountSQL(conn);				
+			ResultSet rs = pstmt.executeQuery();	
+			if(rs.first())	{
+				count = rs.getInt(1);					
+				System.out.println("Employees' count = " + count);
+			}
+			JDBCUtil.commit(conn);
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());	
+			JDBCUtil.rollback(conn);	
+		}
+		finally {		
+			JDBCUtil.closeStatement(pstmt);
+			JDBCUtil.closeConnection(conn);
+		}
+		return count;		
+	}					
+		
 }
