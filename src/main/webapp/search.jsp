@@ -9,9 +9,10 @@
 <h1>Showing employees who translate ${language} language</h1>
 
 <c:forEach var = "employee" items = "${employees}" >		
-	<a href="http://localhost:8080/employees/employee?id=${employee.id}">
+	<a href = "<c:url value='/employee?id=${employee.id}'/>" >
 		<c:out value="${employee.firstName}"/> <c:out value="${employee.lastName}"/>
 	</a>
+
 	<br/>
 </c:forEach>
 

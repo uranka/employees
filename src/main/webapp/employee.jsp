@@ -16,8 +16,8 @@
 			<tr>
 				<td class="what">First Name:</td>
 				<td><c:out value="${employee.firstName}"/></td>				
-				<td rowspan="3">
-					<img src="http://localhost:8080/employees/photo?id=${employee.id}" height="100" />
+				<td rowspan="3">					
+					<img src = "<c:url value='/photo?id=${employee.id}'/>" height="100" />
 				</td>
 			</tr>
 			<tr>
@@ -47,8 +47,8 @@
 	</c:otherwise>
 </c:choose>
 
-<p>Thank you for using our services<p>
-<img src="images/ta-logo.jpg" alt="ta-logo" /><br/>	
+<p>Thank you for using our services<p>	
+<img src = "<c:url value='/images/ta-logo.jpg'/>" alt="ta-logo" /> <br/>	
 
 </body>
 </html>

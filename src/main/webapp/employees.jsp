@@ -17,7 +17,10 @@ Number of pages: ${numberOfPages}<br/>
 	Last Name: <c:out value="${employee.lastName}"/><br/>
 	Sex: <c:out value="${employee.sex}"/><br/>
 	Degree: <c:out value="${employee.degree}"/><br/>
+	<!--
 	<img src="http://localhost:8080/employees/photo?id=${employee.id}" height="100" />
+	-->
+	<img src = "<c:url value='/photo?id=${employee.id}'/>" height="100" />
 	<c:forEach var="language" items="${employee.languages}" >
 		<c:out value="${language}"/>,				
 	</c:forEach>
@@ -25,7 +28,7 @@ Number of pages: ${numberOfPages}<br/>
 </c:forEach>
 
 <c:forEach var = "i" begin = "1" end = "${numberOfPages}">
-	<a href="showemployees?page=${i}">Show ${i}. page</a>         
+	<a href ="<c:url value="/showemployees?page=${i}" />">Show ${i}. page</a>  	
 </c:forEach>
 
 </body>
