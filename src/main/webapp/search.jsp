@@ -8,9 +8,9 @@
 <body>
 <h1>Showing employees who translate ${language} language</h1>
 
-<c:forEach var = "employee" items = "${employees}" >
-	${employee.firstName} ${employee.lastName}<br/>		
-	<!-- stavi linkove ka detaljnijem opisu zaposlenog-->
+<c:forEach var = "employee" items = "${employees}" >		
+	<a href="http://localhost:8080/employees/employee?id=${employee.id}">${employee.firstName} ${employee.lastName}</a>
+	<br/>
 </c:forEach>
 
 </body>

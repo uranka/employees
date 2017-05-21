@@ -18,11 +18,14 @@ import com.jelena.data.jdbc.*;
 @MultipartConfig(maxFileSize = 20480) // upload file's size up to 20KB
 public class EmployeeServlet extends HttpServlet {	
 	private InMemoryService inMemoryService = new InMemoryService(); 
-	private JdbcEmployeeRepository jdbcEmployeeRepository = new JdbcEmployeeRepository();
+	//private JdbcEmployeeRepository jdbcEmployeeRepository = new JdbcEmployeeRepository();
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
+		
+		// premesteno ovde kao lokalna prom. metoda a ne instance varijabla klase		
+		JdbcEmployeeRepository jdbcEmployeeRepository = new JdbcEmployeeRepository();
 		
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
@@ -74,11 +77,25 @@ public class EmployeeServlet extends HttpServlet {
 			System.out.println(e.getFirstName() + ", " + e.getLastName() + ", " +  e.getSex());
 		}		
 		System.out.println("-------------------------------------------");
-		request.setAttribute("listEmployees", listEmployees);
-	
+		request.setAttribute("listEmployees", listEmployees);	
 		
 		RequestDispatcher view = request.getRequestDispatcher("/view.jsp");
 		view.forward(request, response);
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		
+		System.out.println("In the EmployeeServlet servlet, doGet method");					
+		JdbcEmployeeRepository jdbcEmployeeRepository = new JdbcEmployeeRepository();		
+						
+		int employeeId = Integer.parseInt(request.getParameter("id"));
+		Employee emp = jdbcEmployeeRepository.findEmployee(employeeId);
+		request.setAttribute("employee", emp);
+		
+		RequestDispatcher view = request.getRequestDispatcher("/employee.jsp");
+		view.forward(request, response);		
 	}
 }
 		
