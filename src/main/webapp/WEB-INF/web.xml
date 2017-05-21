@@ -43,6 +43,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<url-pattern>/photo</url-pattern>
 </servlet-mapping>
 
+<servlet>
+	<servlet-name>SearchEmployeeServlet</servlet-name>
+	<servlet-class>com.jelena.SearchEmployeeServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>SearchEmployeeServlet</servlet-name>
+	<url-pattern>/search</url-pattern>
+</servlet-mapping>
+
 
 <welcome-file-list>
 	<welcome-file>index.jsp</welcome-file>

@@ -405,6 +405,50 @@ public class JdbcEmployeeRepository {
 			JDBCUtil.closeConnection(conn);
 		}
 		return count;		
-	}					
+	}
+
+/************ SEARC EMPLOYEES BY LANGUAGE ***********************************/
+	public PreparedStatement getEmployeesByLanguageSQL(Connection conn) throws SQLException {
+		String SQL = "SELECT employee_id, first_name, last_name " + 
+					"FROM employees_languages JOIN languages " +
+					"USING (language_id) " +
+					"JOIN employees " +
+					"USING(employee_id) " +
+					"WHERE languages.name = ? ";				
+		PreparedStatement pstmt = conn.prepareStatement(SQL);
+		return pstmt;		
+	}
+		
+	
+	public List<Employee> retrieveEmployeesByLanguage(String language) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;		
+		Employee emp = null;
+		List<Employee> empList = new ArrayList<Employee>();
+		try {		
+			conn = JDBCUtil.getConnection();			
+			pstmt = getEmployeesByLanguageSQL(conn);								
+			pstmt.setString(1, language); // sad mora bas prvo veliko slovo kao u bazi			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {				
+				int employeeId = rs.getInt("employee_id");
+				String firstName = rs.getString("first_name");
+				String lastName = rs.getString("last_name");
+				emp = new Employee(Long.valueOf(employeeId), firstName,lastName);
+				empList.add(emp);				
+			}
+		}
+		catch (SQLException e) {
+			System.out.println(e.getMessage());	
+			JDBCUtil.rollback(conn);	
+		}
+		finally {		
+			JDBCUtil.closeStatement(pstmt);
+			JDBCUtil.closeConnection(conn);
+		}			
+		return empList;	
+	}
+/**********************************************************************************/	
+	
 		
 }
