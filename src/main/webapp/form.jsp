@@ -2,10 +2,16 @@
 <head>
 	<meta charset ="utf-8">
 	<title>Enter employee data</title>
+	<link rel="stylesheet" href="css/main.css" type="text/css" />
 	<link rel="stylesheet" href="css/stylesheet.css" type="text/css" />
 </head>
 
 <body>
+
+<jsp:include page="/includes/header.jsp" />
+<jsp:include page="/includes/column_left_home.jsp" />
+
+<section>
 <h1>Provide your information</h1>
 <form method="POST" action="employee" enctype="multipart/form-data">
 <ul>
@@ -44,41 +50,9 @@
 	</li>
 </ul>
 </form>
+</section>
+
+<jsp:include page="/includes/column_right_home.jsp" />
+<jsp:include page="/includes/footer.jsp" />
+
 </body></html>
-<!--
-<body>
-
-<form action="/mailinglist.php" method="post">
-<ul>
-	<li>
-		<label> Full Name<span class="required" >*</span></label>
-		<input type="text" name="field1"  placeholder="First" class="kratko-polje"/>&nbsp;
-		<input type="text" name="field2"  placeholder="Last" class="kratko-polje"/>		
-	</li>
-	<li>
-		<label> Email<span class="required" >*</span></label>
-		<input type="text" name="field3"  class="dugo-polje" />
-	</li>
-	
-	<li>
-		<label>Subject</label>
-		<select name="size">
-			<option>Advertise</option>
-			<option>Partnership</option>
-			<option>General</option>
-		</select>
-	</li>
-	
-	<li>
-		<label>Your message:<span class="required" >*</span></label>
-		<textarea name="message" maxlength="300"  rows="3" cols="30" placeholder="No more than 300 characters long" ></textarea>
-	</li>
-	
-	<li>
-		<input type="submit" value="Submit" />
-    </li>
-
-</ul>
-</form>
-</body>
--->

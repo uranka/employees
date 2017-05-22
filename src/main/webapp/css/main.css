@@ -1,0 +1,91 @@
+
+body {  
+  font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  margin: 0;
+  background-color:white;
+}
+
+aside a { font-weight: bold; }
+aside a:link { color: green; }
+aside a:visited { color: green; }
+aside a:hover, a:focus { color: blue; }
+
+
+/* the styles for the header */
+header { 
+    padding-bottom: 2em;
+    border-bottom: 2px solid #ef9c00;
+}
+header h1 {
+    color: #ef9c00;
+   /* margin-left: 120px;*/
+    margin-bottom: 0.25em;
+}
+header h2 {
+    color: green;
+    font-style: italic;
+    /*margin-left: 120px;*/
+}
+header img { 
+    float: left;
+}
+
+/* the styles for the footer */
+footer {
+    clear: both;
+    margin-top: 1em;
+    border-top: 2px solid #ef9c00;
+    padding-top: 0.7em;
+}
+footer p {
+    font-size: 80%;
+    text-align: right;
+}
+
+
+/* the styles for the side navigation bar */
+#sidebarA ul {
+    margin-left: 0;
+    list-style: none;	
+}
+
+#sidebarA li {
+    margin-bottom: .5em;		
+}
+
+
+/* the styles for the section */
+section {
+    width: 600px;
+    padding-right: 20px;
+    padding-left: 20px;
+    float: left;    
+}
+section h1 {
+    margin-bottom: 0.35em; 
+}
+section h2 {
+    margin-bottom: 0.35em;
+}
+.top_margin {
+    margin-top: 1em;
+}
+
+
+/* the styles for the sidebars */
+
+#sidebarA { 
+    width: 250px; 
+    float: left; 
+    height: 600px;
+    border-right: 2px solid #ef9c00;
+	/*border: 2px solid red;*/
+}
+#sidebarB { 
+    width: 250px; 
+    float: right; 
+    height: 600px;
+    padding-left: 20px;
+    border-left: 2px solid #ef9c00;
+	/*border: 2px solid red;*/
+}
