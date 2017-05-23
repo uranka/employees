@@ -19,7 +19,10 @@ public class Employee {
 	@NotNull
 	private String sex;
 	
+	@NotNull
+	@Size (min = 1)
 	List<String> languages; 
+	
 	private String degree;
 	
 	public Employee() {

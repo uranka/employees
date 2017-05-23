@@ -39,8 +39,15 @@ public class EmployeeServlet extends HttpServlet {
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
 		String sex = request.getParameter("sex");		
-		String[] lang = request.getParameterValues("languages");		
-		List<String> languages = Arrays.asList(lang);
+		String[] lang = request.getParameterValues("languages");
+		
+		List<String> languages = null;
+		if (lang != null) {
+			languages = Arrays.asList(lang);
+		}
+		
+			
+		
 		String degree = request.getParameter("degree");
 		
 		// GETTING PHOTO
