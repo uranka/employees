@@ -12,6 +12,9 @@ import javax.servlet.annotation.*;
 import com.jelena.data.*;
 import com.jelena.data.jdbc.*;
 
+import javax.validation.*;
+import java.util.Set;
+
 //http://localhost:8080/employees/employee
 // Na ovaj servlet se POST metodom dolazi preko forme klikom na submit dugme submit
 
@@ -26,6 +29,12 @@ public class EmployeeServlet extends HttpServlet {
 		
 		// premesteno ovde kao lokalna prom. metoda a ne instance varijabla klase		
 		JdbcEmployeeRepository jdbcEmployeeRepository = new JdbcEmployeeRepository();
+		
+		// validation
+		ValidatorFactory vf = Validation.buildDefaultValidatorFactory();	
+		Validator validator = vf.getValidator();
+		Set<ConstraintViolation<Employee>> violations;
+		
 		
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
@@ -63,24 +72,47 @@ public class EmployeeServlet extends HttpServlet {
 		Employee emp = new Employee(firstName, lastName, sex, languages, degree);			
 		Employee empSavedToMap = inMemoryService.save(emp); // ovo vraca objekat klase employee sa podesenim id
 		
-		// insert employee from form into database		
-		jdbcEmployeeRepository.insertEmployee(empSavedToMap, filePart); // ovaj employee je prilikom snimanja u mapu dobio id
-				
-		// za prikaz mu ne treba id pa mogu i emp da saljem
-		request.setAttribute("employee", emp);
 		
-		// postaviti kao atribut i listu svih zaposlenih do sada unetih (i snimljenih u mapu)
-		List<Employee> listEmployees = inMemoryService.findAll();
-		// kontrola u konzoli
-		System.out.println("-------------------------------------------");
-		for (Employee e : listEmployees) {
-			System.out.println(e.getFirstName() + ", " + e.getLastName() + ", " +  e.getSex());
-		}		
-		System.out.println("-------------------------------------------");
-		request.setAttribute("listEmployees", listEmployees);	
-		
-		RequestDispatcher view = request.getRequestDispatcher("/view.jsp");
-		view.forward(request, response);
+		// validate empSavedToMap, if validation is successul insert empSavedToMap into the database
+		// otherwise show message that employee was not inserted due to....
+		// trigger validation
+		violations = validator.validate(empSavedToMap);
+		String insertError = "";
+		if (violations.size() > 0) {
+			for (ConstraintViolation<Employee> violation : violations){
+				insertError = violation.getRootBeanClass().getSimpleName() +
+					"." + violation.getPropertyPath() +
+					"-" + violation.getInvalidValue() + 
+					"-" + violation.getMessage();							
+			}
+			System.out.println("insertError = " + insertError);
+			// save String with a message about error
+			// set it as attribute in the request
+			// forward request to the view insert_error.jsp
+			request.setAttribute("insertError", insertError);
+			RequestDispatcher view = request.getRequestDispatcher("/insert_error.jsp");
+			view.forward(request, response);			
+		}
+		else {		
+			// insert employee from form into database		
+			jdbcEmployeeRepository.insertEmployee(empSavedToMap, filePart); // ovaj employee je prilikom snimanja u mapu dobio id
+					
+			// za prikaz mu ne treba id pa mogu i emp da saljem
+			request.setAttribute("employee", emp);
+			
+			// postaviti kao atribut i listu svih zaposlenih do sada unetih (i snimljenih u mapu)
+			List<Employee> listEmployees = inMemoryService.findAll();
+			// kontrola u konzoli
+			System.out.println("-------------------------------------------");
+			for (Employee e : listEmployees) {
+				System.out.println(e.getFirstName() + ", " + e.getLastName() + ", " +  e.getSex());
+			}		
+			System.out.println("-------------------------------------------");
+			request.setAttribute("listEmployees", listEmployees);	
+			
+			RequestDispatcher view = request.getRequestDispatcher("/view.jsp");
+			view.forward(request, response);
+		}
 	}
 	
 	@Override
