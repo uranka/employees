@@ -49,6 +49,8 @@ public class EmployeeServlet extends HttpServlet {
 			
 		
 		String degree = request.getParameter("degree");
+		// test @NotNull constraint for Employee
+		// degree = null;
 		
 		// GETTING PHOTO
        // InputStream fileContent = null; // input stream of the upload file

@@ -23,6 +23,7 @@ public class Employee {
 	@Size (min = 1)
 	List<String> languages; 
 	
+	@NotNull
 	private String degree;
 	
 	public Employee() {
